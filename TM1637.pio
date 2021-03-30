@@ -1,0 +1,106 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; PROGRAM OVERVIEW:
+;
+; START   * SET (write mode or display controll)
+; SHIFT   *
+; ACK     *
+; STOP    *
+;  if OSR EMPTY DONE
+; START   - SET ADDRESS 
+; SHIFT   -
+; ACK     -
+; SHIFT   * SEND DATA
+; ACK     *
+; STOP    *
+;  if OSR NOT EMPTY SEND DATA AGAIN
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+.program tm1637
+.side_set 1 opt 
+
+
+set pins, 1 side 1
+_start:
+
+   pull block
+
+; COMMAND
+_startCond:
+   set x, 7
+   set pins, 1  side 1 [7]
+   set pins, 0
+   set pins, 0  side 0
+
+_bitShiftLoop:
+   out pins, 1  side 0 
+   nop          side 1
+   jmp x-- _bitShiftLoop side 0
+
+_ackCond:
+   set pins, 0  side 0
+   nop          side 1
+   nop          side 0 [1]
+
+_stopCond:
+   set pins, 0  side 1
+   set pins, 1  side 1
+
+   jmp !OSRE _startCond_sendDigit  ; If there only was 1 byte of data in OSR
+                                   ; end here, otherwise continue and send data  
+   jmp _start                      
+
+; COMMAND, SEND DATA
+_startCond_sendDigit:
+   ;pull noblock
+   set pins, 1 side 1 [7]
+   set pins, 0
+   set pins, 0 side 0
+
+_sendCmdAndData:
+   set x, 7
+_bitShiftLoop_sendDigit:
+   out pins, 1 side 0 
+   nop side 1
+   jmp x-- _bitShiftLoop_sendDigit side 0   
+
+_ackCond_sendDigit:
+   set pins, 0 side 0
+   nop side 1
+   nop side 0 [1]
+
+   ; Pull into OSR and if there is data continue sending digits
+   jmp !OSRE _sendCmdAndData
+
+_stopCond_sendDigit:
+   set pins, 0 side 1
+   set pins, 1 side 1
+
+% c-sdk {
+static inline void tm1637_program_init(PIO pio, uint sm, uint offset, uint pin_SCL, uint pin_SDA) {
+    pio_sm_config c = tm1637_program_get_default_config(offset);
+
+    gpio_pull_up(pin_SCL);
+    gpio_pull_up(pin_SDA);
+
+    pio_gpio_init(pio, pin_SCL);
+    pio_gpio_init(pio, pin_SDA);
+
+    sm_config_set_sideset_pins(&c, pin_SCL);
+
+    uint32_t both_pins = (1u << pin_SCL) | (1u << pin_SDA);
+    pio_sm_set_pins_with_mask(pio, sm, both_pins, both_pins);
+    pio_sm_set_pindirs_with_mask(pio, sm, both_pins, both_pins);
+
+    sm_config_set_out_pins(&c, pin_SDA, 1);
+    sm_config_set_set_pins(&c, pin_SDA, 1);
+
+    sm_config_set_out_shift(&c, true, false, 32);
+
+    sm_config_set_clkdiv(&c, (float)(24000000/1000)); // The slowest clock possible!
+
+    // Load our configuration, and jump to the start of the program
+    pio_sm_init(pio, sm, offset, &c);
+
+    // Set the state machine running
+    pio_sm_set_enabled(pio, sm, true);
+}
+%}

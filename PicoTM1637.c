@@ -1,13 +1,11 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <stdbool.h>
-#include "pico/stdlib.h"
-#include "hardware/pio.h"
-// Our assembled program:
-#include "TM1637.pio.h"
+#include <pico/stdlib.h>
+#include <hardware/pio.h>
+#include <PicoTM1637.h>
+#include <PicoTM1637.pio.h>
 
-#define CLK_PIN 26
-#define DIO_PIN 27
 #define SET_WRITEMODE 0x40
 #define WRITE_ADDRESS 0xc0
 #define BRIGHTNESS_BASE 0x88
@@ -37,10 +35,6 @@ const uint8_t digitToSegment[] = {
   };
 
 
-/* Initiate TM1637 display
- *
- * Takes the clock and data pin names (integers) as input.
-*/
 void TM1637_init(uint clk, uint dio) {
   // Choose which PIO instance to use (there are two instances)
   pio = pio0;
@@ -67,21 +61,11 @@ void TM1637_on() {
   pio_sm_put_blocking(pio, sm, BRIGHTNESS_BASE + brightness);
 }
 
-/* Put one or two bytes on TM1637 display. 
- *
- * start_pos: uint from 0 to 3 where 0 is to the left
- * data: raw data for one or two bytes, the first byte will be but to the left
- */
 void TM1637_put_2_bytes(uint start_pos, uint data) {
   uint address = WRITE_ADDRESS + start_pos;
   pio_sm_put_blocking(pio, sm, (data << 16) + (address << 8) +  SET_WRITEMODE);
 }
 
-/* Put one to four bytes on TM1637 display. 
- *
- * start_pos: uint from 0 to 3 where 0 is to the left
- * data: raw data for one to four bytes, the first byte will be but to the left
- */
 void TM1637_put_4_bytes(uint start_pos, uint data) {
   uint address = WRITE_ADDRESS + start_pos;
   uint data1 = data & 0xffff;  // first two bytes
@@ -104,13 +88,6 @@ unsigned int num_to_hex(int num) {
   return hex;
 }
 
-/* Display a number with 4 digits.
- *
- * The least significat digit will be put to the right.
- * Arguments:
- *  int number: The number to display (currently only positve)
- *  bool leadingZeros: If leading Zeros should be displayed or not.
- */
 void TM1637_display(int number, bool leadingZeros) { 
   // Determine length of number
   int len = 0;
@@ -130,7 +107,6 @@ void TM1637_display(int number, bool leadingZeros) {
   unsigned int hex = num_to_hex(number);
   unsigned int startPos = 0;
   if (leadingZeros && (len < MAX_DIGITS)) {
-    printf("Leading zeros and short\n");
     for (int i=len; i<MAX_DIGITS; i++) {
       hex = (hex << 8) + digitToSegment[0];
     }
@@ -138,8 +114,7 @@ void TM1637_display(int number, bool leadingZeros) {
     // Signular case
     hex = digitToSegment[0];
     startPos = MAX_DIGITS - 1;
-  } else {
-    printf("Normal case\n");
+  } else { 
     startPos = MAX_DIGITS - len;
   }
   
@@ -155,33 +130,3 @@ void TM1637_clear() {
   pio_sm_put_blocking(pio, sm, 0x0);
 }
 
-
-
-int main()
-{
-    const uint LED_PIN = 25;
-    gpio_init(LED_PIN);
-    gpio_set_dir(LED_PIN, GPIO_OUT);
-
-    TM1637_init(CLK_PIN, DIO_PIN);  
-    TM1637_display(8888, true); 
-    sleep_ms(500);
-    
-    TM1637_clear();
-    sleep_ms(500);
-
-    int count = 0;
-
-    // just wait here and blink LED like usual...
-    while(1) {
-      TM1637_display(count, false);
-      count++;
-
-      gpio_put(LED_PIN, 1);
-      sleep_ms(500);
-      gpio_put(LED_PIN, 0);
-      sleep_ms(500);
-    }
-
-    return 0;
-} 

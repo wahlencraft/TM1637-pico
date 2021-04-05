@@ -161,6 +161,10 @@ void TM1637_display_right(int num, bool leadingZeros) {
   display_half_base(num, leadingZeros, false, 2);
 }
 
+void TM1637_set_brightness(int value) {
+  brightness = value;
+}
+
 void TM1637_clear() {
   pio_sm_put_blocking(pio, sm, 0x80);
   pio_sm_put_blocking(pio, sm, 0xc040);

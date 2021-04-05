@@ -39,6 +39,14 @@ void TM1637_display_left(int number, bool leadingZeros, bool colon);
 /* Display a number on the 2 rightmost digits on the display. */
 void TM1637_display_right(int number, bool leadingZeros);
 
+/* Set the display brightness.
+ *
+ * val can be a value from 0 to 7. 
+ *
+ * Display brightness is not immeidiatly updated, but next time something is
+ * displayed it will have the new brightness. */
+void TM1637_set_brightness(int val);
+
 /* Clear the display. */
 void TM1637_clear();
  

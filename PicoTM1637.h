@@ -30,6 +30,16 @@ void TM1637_put_4_bytes(uint start_pos, uint data);
  *  bool leadingZeros: If leading Zeros should be displayed or not. */
 void TM1637_display(int number, bool leadingZeros);    
   
+/* Display a number on the 2 leftmost digits on the display, with or without
+ * a colon.
+ *
+ * !!! Avoid using this function since it will cause the right side to blink */
+void TM1637_display_left(int number, bool leadingZeros, bool colon);
+
+/* Display a number on the 2 rightmost digits on the display. */
+void TM1637_display_right(int number, bool leadingZeros);
+
+/* Clear the display. */
 void TM1637_clear();
  
 #endif // TM1637_H_

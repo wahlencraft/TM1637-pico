@@ -76,8 +76,7 @@ void TM1637_put_4_bytes(uint start_pos, uint data) {
 
 /* Convert a number to something readable for the 'put bytes' functions.
  *
- * Warning, input must not be more than 4 digits.
- */
+ * Warning, input must not be more than 4 digits. */
 unsigned int num_to_hex(int num) {
   unsigned int hex = 0x0, seg;
   while (num) {
@@ -88,6 +87,9 @@ unsigned int num_to_hex(int num) {
   return hex;
 }
 
+unsigned int process_hex(uint hex) {
+}
+
 void TM1637_display(int number, bool leadingZeros) { 
   // Determine length of number
   int len = 0;
@@ -96,7 +98,6 @@ void TM1637_display(int number, bool leadingZeros) {
     len++;
     numberCopy /= 10;
   }
-  printf("len = %d, num = %d\n", len, number);
   if (len > 4) {
     printf("Warning number %d too long\n", number);
     len = 4;
@@ -123,10 +124,45 @@ void TM1637_display(int number, bool leadingZeros) {
   TM1637_on();
 }
     
+/* Private base for TM1637_display_left and TM1637_display_right */
+void display_half_base(int num, bool leadingZeros, bool useColon, int startPos) {
+  uint hex;
+  if (num == 0) {
+    // Singular case
+    hex = digitToSegment[0];
+  } else {
+    hex = num_to_hex(num);
+  }
+
+  int numDiv = num / 10;  // determine length of number
   
+  if (!numDiv && leadingZeros) {
+    // num is just 1 digit and we want leadning zeros
+    hex = digitToSegment[0] + (hex << 8);
+  } else if (!numDiv) {
+    // num is just 1 digit  
+    hex = hex << 8;
+  }
+
+  if (useColon) {
+    hex |= 0x8000;
+  }
+  
+  // Display digits
+  TM1637_put_2_bytes(startPos, hex);
+  TM1637_on();
+}
+
+void TM1637_display_left(int num, bool leadingZeros, bool useColon) {
+  display_half_base(num, leadingZeros, useColon, 0);
+}
+
+void TM1637_display_right(int num, bool leadingZeros) {
+  display_half_base(num, leadingZeros, false, 2);
+}
+
 void TM1637_clear() {
   pio_sm_put_blocking(pio, sm, 0x80);
   pio_sm_put_blocking(pio, sm, 0xc040);
   pio_sm_put_blocking(pio, sm, 0x0);
 }
-

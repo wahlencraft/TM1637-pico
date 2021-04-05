@@ -23,7 +23,7 @@ _start:
 
    pull block
 
-; COMMAND
+; SET WRITE MODE / DISPLAY CONTROLL
 _startCond:
    set x, 7
    set pins, 1  side 1 [7]
@@ -48,9 +48,8 @@ _stopCond:
                                    ; end here, otherwise continue and send data  
    jmp _start                      
 
-; COMMAND, SEND DATA
+; SET ADDRESS, SEND DATA
 _startCond_sendDigit:
-   ;pull noblock
    set pins, 1 side 1 [7]
    set pins, 0
    set pins, 0 side 0
@@ -67,7 +66,7 @@ _ackCond_sendDigit:
    nop side 1
    nop side 0 [1]
 
-   ; Pull into OSR and if there is data continue sending digits
+   ; If there is data left continue sending digits
    jmp !OSRE _sendCmdAndData
 
 _stopCond_sendDigit:

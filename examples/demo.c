@@ -33,7 +33,7 @@ int main()
     // Demo a clock5
     int seconds = 0;
     int minutes = 0;
-    TM1637_display_left(minutes, true, true);
+    TM1637_display_left(minutes, true);
     TM1637_display_right(seconds, true);
     while (true) {
       sleep_ms(1000);
@@ -41,7 +41,7 @@ int main()
       if (seconds == 60) {
         seconds = 0;
         minutes++;
-        TM1637_display_left(minutes, true, true);
+        TM1637_display_left(minutes, true);
       }
       TM1637_display_right(seconds, true);
     }

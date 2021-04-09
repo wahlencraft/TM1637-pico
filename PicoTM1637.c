@@ -14,6 +14,7 @@
 /* Global variables */
 PIO pio;
 uint clkPin, dioPin, sm, brightness = 0;
+bool colon = true;
 
 const uint8_t digitToSegment[] = {
   0b00111111,    // 0
@@ -87,9 +88,6 @@ unsigned int num_to_hex(int num) {
   return hex;
 }
 
-unsigned int process_hex(uint hex) {
-}
-
 void TM1637_display(int number, bool leadingZeros) { 
   // Determine length of number
   int len = 0;
@@ -125,7 +123,7 @@ void TM1637_display(int number, bool leadingZeros) {
 }
     
 /* Private base for TM1637_display_left and TM1637_display_right */
-void display_half_base(int num, bool leadingZeros, bool useColon, int startPos) {
+void display_half_base(uint startPos, int num, bool leadingZeros, bool useColon) {
   uint hex;
   if (num == 0) {
     // Singular case
@@ -144,7 +142,7 @@ void display_half_base(int num, bool leadingZeros, bool useColon, int startPos) 
     hex = hex << 8;
   }
 
-  if (useColon) {
+  if(useColon) {
     hex |= 0x8000;
   }
   
@@ -153,12 +151,16 @@ void display_half_base(int num, bool leadingZeros, bool useColon, int startPos) 
   TM1637_on();
 }
 
-void TM1637_display_left(int num, bool leadingZeros, bool useColon) {
-  display_half_base(num, leadingZeros, useColon, 0);
+void TM1637_display_left(int num, bool leadingZeros) {
+  display_half_base(0, num, leadingZeros, colon);
 }
 
 void TM1637_display_right(int num, bool leadingZeros) {
-  display_half_base(num, leadingZeros, false, 2);
+  display_half_base(2, num, leadingZeros, false);
+}
+
+void TM1637_set_colon(bool on) {
+  colon = on;
 }
 
 void TM1637_set_brightness(int value) {

@@ -8,11 +8,13 @@
 int main()
 {   
     TM1637_init(CLK_PIN, DIO_PIN);  
-    TM1637_set_brightness(7);
-    TM1637_display(8888, true); 
+    TM1637_clear(); 
+
+    TM1637_set_brightness(7); // max value, default is 0
+    TM1637_put_4_bytes(1, 0x4f5b06);  // raw bytes for 123 
     sleep_ms(1000);
-    TM1637_set_brightness(0);    // brightness is not updated automatically, 
-    TM1637_display(8888, true);  // something new needs to be displayed.
+    TM1637_set_brightness(0);        // brightness is not updated automatically, 
+    TM1637_put_4_bytes(1, 0x4f5b06); // something new needs to be displayed.
     sleep_ms(1000);
     
     TM1637_clear();
@@ -29,11 +31,9 @@ int main()
     
     sleep_ms(1000);
 
-    // Demo a clock
+    // Demo a clock, by default there will be a colon between the numbers.
     int seconds = 0;
     int minutes = 0;
-    //TM1637_display_left(minutes, true);
-    //TM1637_display_right(seconds, true);
     TM1637_display_both(minutes, seconds, true);
     while (true) {
       sleep_ms(1000);
@@ -46,7 +46,6 @@ int main()
         TM1637_display_right(seconds, true);
       }
     }
-
 
     return 0;
 } 

@@ -36,12 +36,16 @@ void TM1637_display(int number, bool leadingZeros);
 /* Display a number on the 2 leftmost digits on the display. A colon is by
  * default shown, to turn this off use TM1637_set_colon(false)
  *
- * !!! Avoid using this function since it will cause the right side to blink. 
+ * !!! Avoid using this function since it will cause the right side to flicker. 
  * Instead use TM1637_display_both. */
 void TM1637_display_left(int number, bool leadingZeros);
 
 /* Display a number on the 2 rightmost digits on the display. */
 void TM1637_display_right(int number, bool leadingZeros);
+
+/* Display two (two digit) numbers on the display. By default there will be a 
+ * colon between them. Disable this behaviour with TM1637_set_colon(false); */
+void TM1637_display_both(int leftNumber, int rightNumber, bool leadingZeros);
 
 /* Turn the colon led on or off. Default is on.
  *

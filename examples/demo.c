@@ -21,7 +21,6 @@ int main()
     // Count up from 0
     int count = 0;
     while(count <= 200) {
-      printf("TEST\n");
       TM1637_display(count, false);
       count++;
       // The display can not update too often. So even though there is no
@@ -30,20 +29,22 @@ int main()
     
     sleep_ms(1000);
 
-    // Demo a clock5
+    // Demo a clock
     int seconds = 0;
     int minutes = 0;
-    TM1637_display_left(minutes, true);
-    TM1637_display_right(seconds, true);
+    //TM1637_display_left(minutes, true);
+    //TM1637_display_right(seconds, true);
+    TM1637_display_both(minutes, seconds, true);
     while (true) {
       sleep_ms(1000);
       seconds++;
       if (seconds == 60) {
         seconds = 0;
         minutes++;
-        TM1637_display_left(minutes, true);
+        TM1637_display_both(minutes, seconds, true);
+      } else {
+        TM1637_display_right(seconds, true);
       }
-      TM1637_display_right(seconds, true);
     }
 
 

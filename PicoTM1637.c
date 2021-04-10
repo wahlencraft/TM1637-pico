@@ -122,8 +122,8 @@ void TM1637_display(int number, bool leadingZeros) {
   TM1637_on();
 }
     
-/* Private base for TM1637_display_left and TM1637_display_right */
-void display_half_base(uint startPos, int num, bool leadingZeros, bool useColon) {
+/* Helper for getting the segment representation for a 2 digit number. */
+uint two_digit_to_segment(int num, bool leadingZeros, bool useColon) {
   uint hex;
   if (num == 0) {
     // Singular case
@@ -146,17 +146,30 @@ void display_half_base(uint startPos, int num, bool leadingZeros, bool useColon)
     hex |= 0x8000;
   }
   
-  // Display digits
-  TM1637_put_2_bytes(startPos, hex);
-  TM1637_on();
+  return hex;
 }
 
 void TM1637_display_left(int num, bool leadingZeros) {
-  display_half_base(0, num, leadingZeros, colon);
+  uint hex = two_digit_to_segment(num, leadingZeros, colon); 
+  
+  TM1637_put_2_bytes(0, hex);
+  TM1637_on();
 }
 
 void TM1637_display_right(int num, bool leadingZeros) {
-  display_half_base(2, num, leadingZeros, false);
+  uint hex = two_digit_to_segment(num, leadingZeros, false);
+
+  TM1637_put_2_bytes(2, hex);
+  TM1637_on();
+}
+
+void TM1637_display_both(int leftNum, int rightNum, bool leadingZeros) {
+  uint leftHex = two_digit_to_segment(leftNum, leadingZeros, colon);
+  uint rightHex = two_digit_to_segment(rightNum, leadingZeros, false);
+
+  uint hex = leftHex + (rightHex << 16);
+  TM1637_put_4_bytes(0, hex);
+  TM1637_on();
 }
 
 void TM1637_set_colon(bool on) {

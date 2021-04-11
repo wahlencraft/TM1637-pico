@@ -80,7 +80,7 @@ void TM1637_put_4_bytes(uint start_pos, uint data) {
 /* Convert a number to something readable for the 'put bytes' functions.
  *
  * Warning, input must not be more than 4 digits. */
-unsigned int num_to_hex(int num) {
+  unsigned int num_to_hex(int num) {
   unsigned int hex = 0x0, seg;
   while (num) {
     seg = digitToSegment[num % 10];  // extract last digit as 7 segment byte
@@ -91,6 +91,15 @@ unsigned int num_to_hex(int num) {
 }
 
 void TM1637_display(int number, bool leadingZeros) { 
+  // Is number positive or negative?
+  int isPositive;
+  int isNegative;
+  if (number >= 0) {
+    isPositive = 1;
+  } else {
+    isPositive = 0;
+    number = -1*number;
+  }
   // Determine length of number
   int len = 0;
   int numberCopy = number;
@@ -98,14 +107,18 @@ void TM1637_display(int number, bool leadingZeros) {
     len++;
     numberCopy /= 10;
   }
-  if (len > 4) {
+  if (len > 3 + isPositive) {
     printf("Warning number %d too long\n", number);
-    len = 4;
-    // least signigicant digits will be cut of in num_to_hex
+    len = 3 + isPositive;
+    // least signigicant digits will be lost
   }
 
   // Get hex
   unsigned int hex = num_to_hex(number);
+  if (!isPositive) {
+    hex = (hex << 8) + 0x40;  // add a negative sign
+    len++;  // count negative sign in length
+  } 
   unsigned int startPos = 0;
   if (leadingZeros && (len < MAX_DIGITS)) {
     for (int i=len; i<MAX_DIGITS; i++) {

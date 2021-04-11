@@ -20,16 +20,20 @@ int main()
     TM1637_clear();
     sleep_ms(500);
     
-    // Count up from 0
-    int count = 0;
-    while(count <= 200) {
+    // Count down from 150 to -50
+    int count = 150;
+    TM1637_display(count, false);
+    sleep_ms(500);
+    while(count >= -50) {
       TM1637_display(count, false);
-      count++;
+      count--;
       // The display can not update too often. So even though there is no
       // sleep, this will take a couple of moments.
     }
     
     sleep_ms(1000);
+    TM1637_clear();
+    sleep_ms(500);
 
     // Demo a clock, by default there will be a colon between the numbers.
     int seconds = 0;

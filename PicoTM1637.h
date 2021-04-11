@@ -25,26 +25,27 @@ void TM1637_put_2_bytes(uint start_pos, uint data);
  *       to the left */
 void TM1637_put_4_bytes(uint start_pos, uint data);
 
-/* Display a number with 4 digits.
+/* Display a positive number with 4 digits or a negative number with 3 digits.
  *
  * The least significat digit will be put to the right.
  * Arguments:
- *  int number: The number to display (currently only positve)
+ *  int number: The number to display.
  *  bool leadingZeros: If leading Zeros should be displayed or not. */
 void TM1637_display(int number, bool leadingZeros);    
   
-/* Display a number on the 2 leftmost digits on the display. A colon is by
- * default shown, to turn this off use TM1637_set_colon(false)
+/* Display a posetive number on the 2 leftmost digits on the display. A colon is
+ * by default shown, to turn this off use TM1637_set_colon(false)
  *
  * !!! Avoid using this function since it will cause the right side to flicker. 
  * Instead use TM1637_display_both. */
 void TM1637_display_left(int number, bool leadingZeros);
 
-/* Display a number on the 2 rightmost digits on the display. */
+/* Display a positive number on the 2 rightmost digits on the display. */
 void TM1637_display_right(int number, bool leadingZeros);
 
-/* Display two (two digit) numbers on the display. By default there will be a 
- * colon between them. Disable this behaviour with TM1637_set_colon(false); */
+/* Display two (two digit positive) numbers on the display. By default there 
+ * will be a colon between them. Disable this behaviour with 
+ * TM1637_set_colon(false); */
 void TM1637_display_both(int leftNumber, int rightNumber, bool leadingZeros);
 
 /* Turn the colon led on or off. Default is on.

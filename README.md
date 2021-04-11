@@ -3,7 +3,7 @@ TM1637-pico
 #### Control TM1637 based 7-segment display from raspberry pi pico.
 
 ## Features
-* Display a positive 4 digit number
+* Display a positive 4 digit number or a negative 3 digit number.
 * Display two positive 2 digit numbers with (or without) a colon in between.
 * You can choose if you want leading zeros in both of the above cases.
 * Display 4 or 2 digits of raw data.
@@ -12,15 +12,14 @@ TM1637-pico
 The actual communication with the display is handled by the picos pio 
 functionality. When a display function is called, some data is very quickly put 
 into a buffer that the pio has access to. The pio will then, one bit at a time 
-send send the data to the TM1637 display. If to much data is sent to the display 
-in a short period of time, the buffer will become full.
-This will block further execution in the main program if even more data is sent
-to the display. 
+send send the data to the TM1637 display. If you attempt to display too much 
+in a short period of time, the buffer will become full. This will block further
+execution in the main program if even more data is sent to the display. 
 
 This library will only work with the 4 digit version of the display.
 
-To get started have a look at the `examples/demo.c` file. For a full list of functions 
-please refer to `PicoTM1637.h`
+To get started have a look at the `examples/demo.c` file. For a full list of 
+functions please refer to `PicoTM1637.h`
 
 ## Setup
 1. Download the files from this repository and put them in a folder somewhere.

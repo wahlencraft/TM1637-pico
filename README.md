@@ -12,7 +12,7 @@ TM1637-pico
 The actual communication with the display is handled by the picos pio 
 functionality. When a display function is called, some data is very quickly put 
 into a buffer that the pio has access to. The pio will then, one bit at a time 
-send send the data to the TM1637 display. If you attempt to display too much 
+send the data to the TM1637 display. If you attempt to display too much 
 in a short period of time, the buffer will become full. This will block further
 execution in the main program if even more data is sent to the display. 
 
@@ -24,7 +24,8 @@ functions please refer to `PicoTM1637.h`
 ## Setup
 1. Download the files from this repository and put them in a folder somewhere.
 2. In your CMAKE file:
-   `include(/path/to/folder/TM1637-pico/PicoTM1637.cmake)`
+   `include(/path/to/folder/TM1637-pico/PicoTM1637.cmake)` and
+   `target_link_libraries(your_target PicoTM1637)`
 3. In your c file:
    `#include <PicoTM1637.h>`
 ## Wiring

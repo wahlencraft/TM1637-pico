@@ -2,6 +2,10 @@ TM1637-pico
 =============
 #### Control TM1637 based 7-segment display from raspberry pi pico.
 
+<p align="center" width="100%">
+  <img src="image.jpg" alt="drawing" width="33%" align="c"/>
+</p>
+
 ## Features
 * Display a positive 4 digit number or a negative 3 digit number.
 * Display two positive 2 digit numbers with (or without) a colon in between.

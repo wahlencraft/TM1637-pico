@@ -79,13 +79,25 @@ void TM1637_put_4_bytes(uint start_pos, uint data) {
 
 /* Convert a number to something readable for the 'put bytes' functions.
  *
- * Warning, input must not be more than 4 digits. */
-  unsigned int num_to_hex(int num) {
+ * Warning, input must not be more than 4 digits. Then least significant digits
+ * will be cut of.
+ *
+ * You can also cut of parts with a bitmask. If bitMask = 0 nothing will
+ * happen.*/
+unsigned int num_to_hex(int num, uint bitMask) {
   unsigned int hex = 0x0, seg;
-  while (num) {
-    seg = digitToSegment[num % 10];  // extract last digit as 7 segment byte
-    num /= 10;  // remove last digit from num
-    hex = seg + (hex << 8);  // Put new segment to the right in hex
+  if (num == 0) {
+    // singular case
+    hex = digitToSegment[0];
+  } else {
+    while (num) {
+      seg = digitToSegment[num % 10];  // extract last digit as 7 segment byte
+      num /= 10;  // remove last digit from num
+      hex = seg + (hex << 8);  // Put new segment to the right in hex
+    }
+  }
+  if (bitMask) {
+    hex &= bitMask;
   }
   return hex;
 }
@@ -114,7 +126,7 @@ void TM1637_display(int number, bool leadingZeros) {
   }
 
   // Get hex
-  unsigned int hex = num_to_hex(number);
+  unsigned int hex = num_to_hex(number, 0);
   if (!isPositive) {
     hex = (hex << 8) + 0x40;  // add a negative sign
     len++;  // count negative sign in length
@@ -138,13 +150,7 @@ void TM1637_display(int number, bool leadingZeros) {
     
 /* Helper for getting the segment representation for a 2 digit number. */
 uint two_digit_to_segment(int num, bool leadingZeros, bool useColon) {
-  uint hex;
-  if (num == 0) {
-    // Singular case
-    hex = digitToSegment[0];
-  } else {
-    hex = num_to_hex(num);
-  }
+  uint hex = num_to_hex(num, 0xffff);
 
   int numDiv = num / 10;  // determine length of number
   

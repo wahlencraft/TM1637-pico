@@ -36,7 +36,7 @@ static const uint8_t digitToSegment[] = {
   };
 
 static const uint8_t segmentsArr[] = {
-#include "char_table.txt"
+#include "../data/char_table.txt"
 };
 
 void TM1637_init(uint clk, uint dio) {

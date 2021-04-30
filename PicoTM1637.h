@@ -33,6 +33,13 @@ void TM1637_put_4_bytes(uint start_pos, uint data);
  *  bool leadingZeros: If leading Zeros should be displayed or not. */
 void TM1637_display(int number, bool leadingZeros);    
   
+/* Display a string of characters.
+ *
+ * - The string may be at most 4 chars long
+ * - Align left or right with the argument leftAlign, has no effect if all
+ *   4 chars areall 4 chars are used. used. */
+void TM1637_display_word(char *word, bool leftAlign);
+
 /* Display a posetive number on the 2 leftmost digits on the display. A colon is
  * by default shown, to turn this off use TM1637_set_colon(false)
  *

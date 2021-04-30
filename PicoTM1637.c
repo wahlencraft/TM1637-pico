@@ -16,7 +16,7 @@ PIO pio;
 uint clkPin, dioPin, sm, brightness = 0;
 bool colon = true;
 
-const uint8_t digitToSegment[] = {
+static const uint8_t digitToSegment[] = {
   0b00111111,    // 0
   0b00000110,    // 1
   0b01011011,    // 2
@@ -35,6 +35,9 @@ const uint8_t digitToSegment[] = {
   0b01110001     // F
   };
 
+static const uint8_t segmentsArr[] = {
+#include "char_table.txt"
+};
 
 void TM1637_init(uint clk, uint dio) {
   // Choose which PIO instance to use (there are two instances)
@@ -102,6 +105,21 @@ unsigned int num_to_hex(int num, uint bitMask) {
   return hex;
 }
 
+
+/* Helper for converting a char to the 7-segment representation. */
+uint fetch_char_encoding(char charToFind) {
+  short i = 0;
+  uint8_t c = 1;
+  while (c != '\0') {
+    c = segmentsArr[i];
+    if (c == charToFind) {
+      return segmentsArr[i+1];
+    }
+    i += 2;  // only every other element is a characer to look for
+  }
+  printf("%c not found\n", charToFind);
+}
+
 void TM1637_display(int number, bool leadingZeros) { 
   // Is number positive or negative?
   int isPositive;
@@ -147,7 +165,27 @@ void TM1637_display(int number, bool leadingZeros) {
   // Display number
   TM1637_put_4_bytes(startPos, hex);
 }
-    
+
+void TM1637_display_word(char *word, bool leftAlign) {
+  // Find the binary representation of the word
+  uint bin = 0;
+  int i = 0;
+  char c = word[0];
+  while ((c != '\0') && (i < MAX_DIGITS)) {
+    bin += (fetch_char_encoding(c)<< 8*i);
+    i++;
+    c = word[i];
+  }
+  // Display word
+  uint startIndex;
+  if (leftAlign) {
+    startIndex = 0;
+  } else {
+    startIndex = MAX_DIGITS - i;
+  }
+  TM1637_put_4_bytes(startIndex, bin);
+}
+
 /* Helper for getting the segment representation for a 2 digit number. */
 uint two_digit_to_segment(int num, bool leadingZeros, bool useColon) {
   uint hex = num_to_hex(num, 0xffff);

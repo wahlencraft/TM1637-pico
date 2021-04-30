@@ -10,6 +10,7 @@ TM1637-pico
 * Display a positive 4 digit number or a negative 3 digit number.
 * Display two positive 2 digit numbers with (or without) a colon in between.
 * You can choose if you want leading zeros in both of the above cases.
+* Display a 4 letter word.
 * Display 4 or 2 digits of raw data.
 * Choose the display brightness (on a 8 step scale).
 

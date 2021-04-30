@@ -1,75 +1,85 @@
+/** @file */
+
 #ifndef TM1637_H_
 #define TM1637_H_
 
 #include <stdbool.h>
 
-/* Initiate TM1637 display
+/** 
+ * Initiate TM1637 display
  *
- * Takes the clock and data pin names (integers) as input. */
+ * @param clk is the clock GPIO pin number. 
+ * @param dio is the data GPIO pin number. */
 void TM1637_init(uint clk, uint dio);
 
-/* Put one or two bytes on TM1637 display. 
+/** Display one or two bytes of raw data on the display. 
  *
- * start_pos: uint from 0 to 3 where 0 is to the left
- * data: raw data for one or two bytes, the least significant byte will be put 
- *       to the left. 
+ * @param startPos The digit index to start at. Ranges from `0` to `3`, where 
+ *        `0` is to the left
+ * @param data The data for one or two bytes, the least significant byte will be 
+ *        put to the left. 
  *        
- *       For example the two bytes 0x3f05 = 0b0011111100000110 will 
- *       result in: 10 */
-void TM1637_put_2_bytes(uint start_pos, uint data);
+ * For example `TM1637_put_2_bytes(2, 0x3f05)` will show the number 10 on the
+ * right half of the display. */
+void TM1637_put_2_bytes(uint startPos, uint data);
 
-/* Put one to four bytes on TM1637 display. 
+/** Display one to four bytes of raw data on the display. 
  *
- * start_pos: uint from 0 to 3 where 0 is to the left
- * data: raw data for one to four bytes, the least significant byte will be put 
- *       to the left */
-void TM1637_put_4_bytes(uint start_pos, uint data);
+ * @param startPos The digit index to start at. Ranges from `0` to `3`, where 
+ *        `0` is to the left
+ * @param data The data for one to four bytes, the least significant byte will 
+ *        be put to the left. */
+void TM1637_put_4_bytes(uint startPos, uint data);
 
-/* Display a positive number with 4 digits or a negative number with 3 digits.
- *
- * The least significat digit will be put to the right.
- * Arguments:
- *  int number: The number to display.
- *  bool leadingZeros: If leading Zeros should be displayed or not. */
+/** Display a positive number with 4 digits or a negative number with 3 digits.
+ * 
+ *  @param number The number to display.
+ *  @param leadingZeros If leading zeros should be displayed or not. */
 void TM1637_display(int number, bool leadingZeros);    
   
-/* Display a string of characters.
+/** Display a string of characters.
  *
- * - The string may be at most 4 chars long
- * - Align left or right with the argument leftAlign, has no effect if all
- *   4 chars areall 4 chars are used. used. */
+ * @param word The word to display. May be at most 4 letters long. __Supporded
+ * letters? TODO__
+ * @param leftAlign true if left alignment is desired, false for right 
+ * alignment. Has no effect if all 4 chars are used. */
 void TM1637_display_word(char *word, bool leftAlign);
 
-/* Display a posetive number on the 2 leftmost digits on the display. A colon is
- * by default shown, to turn this off use TM1637_set_colon(false)
+/** Display a positive number on the 2 leftmost digits on the display. 
  *
- * !!! Avoid using this function since it will cause the right side to flicker. 
- * Instead use TM1637_display_both. */
+ * A colon is by default shown. To turn this off use 
+ * TM1637_set_colon(bool false).
+ *
+ * __Avoid using this function.__ It will cause the right side to flicker. 
+ * Instead use TM1637_display_both(). */
 void TM1637_display_left(int number, bool leadingZeros);
 
-/* Display a positive number on the 2 rightmost digits on the display. */
+/** Display a positive number on the 2 rightmost digits on the display. 
+ * 
+ * A colon is by default shown. To turn this off use 
+ * TM1637_set_colon(bool false). */
 void TM1637_display_right(int number, bool leadingZeros);
 
-/* Display two (two digit positive) numbers on the display. By default there 
- * will be a colon between them. Disable this behaviour with 
- * TM1637_set_colon(false); */
+/** Display two (2 digit positive) numbers on the display. 
+ * 
+ * A colon is by default shown in between. To turn this off use 
+ * TM1637_set_colon(bool false). */
 void TM1637_display_both(int leftNumber, int rightNumber, bool leadingZeros);
 
-/* Turn the colon led on or off. Default is on.
+/** Turn the colon led on or off. Default is on.
  *
- * Note that this not immeidiatly updated, but will be next time something is 
- * displayd with a colon supporting function. */
+ * The colon is not immeidiatly updated, but will be next time something is 
+ * displayed (with a colon supporting function). */
 void TM1637_set_colon(bool on);
 
-/* Set the display brightness.
- *
- * val can be a value from 0 to 7. 
- *
+/** Set the display brightness.
+ * 
  * Display brightness is not immeidiatly updated, but next time something is
- * displayed it will have the new brightness. */
+ * displayed it will have the new brightness.
+ * @param val can be a value from `0` to `7`. The default brightness is 0. */
 void TM1637_set_brightness(int val);
 
-/* Clear the display. */
+/** Clear the display. */
 void TM1637_clear();
  
 #endif // TM1637_H_

@@ -23,8 +23,9 @@ execution in the main program if even more data is sent to the display.
 
 This library will only work with the 4 digit version of the display.
 
-To get started have a look at the `examples/demo.c` file. For a full list of 
-functions please refer to `PicoTM1637.h`
+To get started have a look at the `examples/demo.c` file. The full documentation
+can be found 
+[here](https://wahlencraft.github.io/TM1637-pico/html/PicoTM1637_8h.html).
 
 ## Setup
 1. Download the files from this repository and put them in a folder somewhere.

@@ -302,11 +302,12 @@ Functions</h2></td></tr>
 <p>Display a string of characters. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">word</td><td>The word to display. May be at most 4 letters long. <b>Supporded letters? TODO</b> </td></tr>
-    <tr><td class="paramname">leftAlign</td><td>true if left alignment is desired, false for right alignment. Has no effect if all 4 chars are used. </td></tr>
+    <tr><td class="paramname">word</td><td>The word to display. May be at most 4 letters long. </td></tr>
+    <tr><td class="paramname">leftAlign</td><td>true if left alignment is desired, false for right alignment. Has no effect if all 4 chars are used.</td></tr>
   </table>
   </dd>
 </dl>
+<p>All English alphabet letters are supported in lower or upper case. If the desired case is not found, the other will be displayed instead. If a character is not found at all it will be replaced by white space. For a full list of supported characters, as well as their hexadecimal representation please look at <a class="el" href="char__table_8txt.html">char_table.txt</a>. </p>
 
 </div>
 </div>
@@ -439,7 +440,7 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Set the display brightness. </p>
-<p>Display brightness is not immeidiatly updated, but next time something is displayed it will have the new brightness. </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Display brightness is not immediately updated, but next time something is displayed it will have the new brightness. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">val</td><td>can be a value from <code>0</code> to <code>7</code>. The default brightness is 0. </td></tr>
   </table>
@@ -466,7 +467,7 @@ Functions</h2></td></tr>
 
 <p>Turn the colon led on or off. </p>
 <p>Default is on.</p>
-<p>The colon is not immeidiatly updated, but will be next time something is displayed (with a colon supporting function). </p>
+<p>The colon is not immediately updated, but will be next time something is displayed (with a colon supporting function). </p>
 
 </div>
 </div>

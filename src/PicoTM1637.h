@@ -39,10 +39,15 @@ void TM1637_display(int number, bool leadingZeros);
   
 /** Display a string of characters.
  *
- * @param word The word to display. May be at most 4 letters long. __Supporded
- * letters? TODO__
+ * @param word The word to display. May be at most 4 letters long.
  * @param leftAlign true if left alignment is desired, false for right 
- * alignment. Has no effect if all 4 chars are used. */
+ * alignment. Has no effect if all 4 chars are used. 
+ *
+ * All English alphabet letters are supported in lower or upper case. If
+ * the desired case is not found, the other will be displayed instead.
+ * If a character is not found at all it will be replaced by white space.
+ * For a full list of supported characters, as well as their hexadecimal
+ * representation please look at char_table.txt.*/
 void TM1637_display_word(char *word, bool leftAlign);
 
 /** Display a positive number on the 2 leftmost digits on the display. 
@@ -68,13 +73,13 @@ void TM1637_display_both(int leftNumber, int rightNumber, bool leadingZeros);
 
 /** Turn the colon led on or off. Default is on.
  *
- * The colon is not immeidiatly updated, but will be next time something is 
+ * The colon is not immediately updated, but will be next time something is 
  * displayed (with a colon supporting function). */
 void TM1637_set_colon(bool on);
 
 /** Set the display brightness.
  * 
- * Display brightness is not immeidiatly updated, but next time something is
+ * Display brightness is not immediately updated, but next time something is
  * displayed it will have the new brightness.
  * @param val can be a value from `0` to `7`. The default brightness is 0. */
 void TM1637_set_brightness(int val);

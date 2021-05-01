@@ -117,7 +117,18 @@ uint fetch_char_encoding(char charToFind) {
     }
     i += 2;  // only every other element is a characer to look for
   }
-  printf("%c not found\n", charToFind);
+  // Could not find charToFind, try to find lower/upper case of same letter.
+  // note that every english letter exists in one of these forms.
+  if ((0x40 < charToFind) && (charToFind < 0x5b)) {
+    // this is upper case
+    return fetch_char_encoding(charToFind + 0x20);
+  } else if ((0x60 < charToFind) && (charToFind < 0x7b)) {
+    // this is lower case
+    return fetch_char_encoding(charToFind - 0x20);
+  }
+  // Still not found, return empty
+  printf("Warning! char %c not found by fetch_char_encoding()\n", charToFind);
+  return fetch_char_encoding(' '); 
 }
 
 void TM1637_display(int number, bool leadingZeros) { 
@@ -171,6 +182,7 @@ void TM1637_display_word(char *word, bool leftAlign) {
   uint bin = 0;
   int i = 0;
   char c = word[0];
+  uint enc;
   while ((c != '\0') && (i < MAX_DIGITS)) {
     bin += (fetch_char_encoding(c)<< 8*i);
     i++;

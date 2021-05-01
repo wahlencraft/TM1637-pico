@@ -1,0 +1,19 @@
+/**
+\mainpage
+\htmlinclude manifest.html
+
+__TM1637 Pico__ is a library to use the TM1637 display on the Raspberry Pi
+Pico.
+
+The actual communication with the display is handled by the picos pio
+functionality. When a display function is called, some data is very quickly put
+into a buffer that the pio has access to. The pio will then, one bit at a time
+send the data to the TM1637 display. If you attempt to display too much in a
+short period of time, the buffer will become full. This will block further
+execution in the main program if even more data is sent to the display.
+
+\section Links
+
+For documentation on all the global functions, see PicoTM1637.h.
+
+*/

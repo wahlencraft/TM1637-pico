@@ -9,8 +9,12 @@ int main()
 {   
     TM1637_init(CLK_PIN, DIO_PIN);  
     TM1637_clear(); 
-
+    
     TM1637_set_brightness(7); // max value, default is 0
+    
+    TM1637_display_word("dEMO", true);
+    sleep_ms(2000);
+
     TM1637_put_4_bytes(1, 0x4f5b06);  // raw bytes for 123 
     sleep_ms(1000);
     TM1637_set_brightness(0);        // brightness is not updated automatically, 

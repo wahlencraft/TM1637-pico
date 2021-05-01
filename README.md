@@ -10,6 +10,7 @@ TM1637-pico
 * Display a positive 4 digit number or a negative 3 digit number.
 * Display two positive 2 digit numbers with (or without) a colon in between.
 * You can choose if you want leading zeros in both of the above cases.
+* Display a 4 letter word.
 * Display 4 or 2 digits of raw data.
 * Choose the display brightness (on a 8 step scale).
 
@@ -22,8 +23,9 @@ execution in the main program if even more data is sent to the display.
 
 This library will only work with the 4 digit version of the display.
 
-To get started have a look at the `examples/demo.c` file. For a full list of 
-functions please refer to `PicoTM1637.h`
+To get started have a look at the `examples/demo.c` file. The full documentation
+can be found 
+[here](https://wahlencraft.github.io/TM1637-pico/html/PicoTM1637_8h.html).
 
 ## Setup
 1. Download the files from this repository and put them in a folder somewhere.

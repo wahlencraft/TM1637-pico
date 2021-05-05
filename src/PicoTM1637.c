@@ -250,3 +250,7 @@ void TM1637_clear() {
   pio_sm_put_blocking(pio, sm, 0xc040);
   pio_sm_put_blocking(pio, sm, 0x0);
 }
+
+void TM1637_wait() {
+  while (!pio_sm_is_tx_fifo_empty(pio, sm)) {}
+}

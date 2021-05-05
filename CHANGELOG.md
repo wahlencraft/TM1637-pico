@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+### Added
+- Ability to wait for everything to be sent to display. 
+
 ## [1.1.0] - 2020-05-01
 ### Added
 - Ability to display words with the

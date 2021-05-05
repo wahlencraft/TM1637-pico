@@ -86,5 +86,15 @@ void TM1637_set_brightness(int val);
 
 /** Clear the display. */
 void TM1637_clear();
- 
+
+
+/** Wait for the buffered data to be sent to the TM1637 display.
+ *
+ * When calling a function such as TM1637_display() the result is actually not
+ * immediately sent to the display. This is because the PIO hardware on the pico
+ * is running slower than the CPU. Usually this is fine, it's fast enough to
+ * appear instant, but sometimes you want to wait for it to finish. For example
+ * if you will enter sleep mode and want the display to update beforehand. */
+void TM1637_wait();
+
 #endif // TM1637_H_

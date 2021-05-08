@@ -252,5 +252,19 @@ void TM1637_clear() {
 }
 
 void TM1637_wait() {
-  while (!pio_sm_is_tx_fifo_empty(pio, sm)) {}
+  while (!pio_sm_is_tx_fifo_empty(pio, sm)) {
+    // Wait while there is something in tx fifo (on the way out). 
+    if (!pio_sm_is_rx_fifo_empty(pio, sm)) {
+      // Found some response from the sm. Since the tx still isn't empty
+      // we just want to throw this away.
+      pio_sm_get_blocking(pio, sm);
+    }
+  }
+  int d = 0;
+  while (d != 1) {
+    // Now there is nothing in tx fifo, but there might still be work to do.
+    // The status 1 is sent as a response when done.
+    d = pio_sm_get_blocking(pio, sm);
+  }
+  uart_default_tx_wait_blocking();
 }

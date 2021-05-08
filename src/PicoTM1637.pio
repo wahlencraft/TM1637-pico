@@ -63,7 +63,7 @@ _bitShiftLoop_sendDigit:
 
 _ackCond_sendDigit:
    set pins, 0 side 0
-   nop side 1
+   set y, 1 side 1  ; think of as nop. This is to save an instruction later.
    nop side 0 [1]
 
    ; If there is data left continue sending digits
@@ -72,6 +72,10 @@ _ackCond_sendDigit:
 _stopCond_sendDigit:
    set pins, 0 side 1
    set pins, 1 side 1
+
+; Send back message to program indicating that we're done
+   IN y, 32;
+   PUSH noblock;
 
 % c-sdk {
 static inline void tm1637_program_init(PIO pio, uint sm, uint offset, uint pin_SCL, uint pin_SDA) {

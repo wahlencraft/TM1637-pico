@@ -182,9 +182,19 @@ void TM1637_display_word(char *word, bool leftAlign) {
   uint bin = 0;
   int i = 0;
   char c = word[0];
-  uint enc;
-  while ((c != '\0') && (i < MAX_DIGITS)) {
-    bin += (fetch_char_encoding(c)<< 8*i);
+  int col = -1;
+  int len = 0;
+  while ((c != '\0') && (len < MAX_DIGITS)) {
+    if (c == ':') {
+      // remember colon
+      col = i - 1;
+      if ((col < 0) || (col > MAX_DIGITS)) {
+        printf("Warning, TM1637_display_word colon out of bounds.\n");
+      }
+    } else {
+      bin += (fetch_char_encoding(c)<< 8*len);
+      len++;
+    }
     i++;
     c = word[i];
   }
@@ -193,8 +203,13 @@ void TM1637_display_word(char *word, bool leftAlign) {
   if (leftAlign) {
     startIndex = 0;
   } else {
-    startIndex = MAX_DIGITS - i;
+    startIndex = MAX_DIGITS - len;
   }
+  // add colon
+  if (col >= 0) {
+    bin |= (0x80 << col*8);
+  }
+  printf("0x%x\n", bin);
   TM1637_put_4_bytes(startIndex, bin);
 }
 

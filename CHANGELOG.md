@@ -2,7 +2,10 @@
 
 ## Unreleased
 ### Added
-- Ability to wait for everything to be sent to display. 
+- Ability to wait for everything to be sent to display with the `TM1637_wait()`
+  function. 
+## Changed
+- `TM1637_display_word()` can now also disply a colon.
 
 ## [1.1.0] - 2020-05-01
 ### Added

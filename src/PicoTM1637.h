@@ -47,7 +47,11 @@ void TM1637_display(int number, bool leadingZeros);
  * the desired case is not found, the other will be displayed instead.
  * If a character is not found at all it will be replaced by white space.
  * For a full list of supported characters, as well as their hexadecimal
- * representation please look at char_table.txt.*/
+ * representation please look at char_table.txt.
+ *
+ * You can also include a colon (:) in the string. This character is not
+ * counted in the word length as the colon internaly belongs to the character
+ * before it. Will only work if aligned with the colon spot on the display. */
 void TM1637_display_word(char *word, bool leftAlign);
 
 /** Display a positive number on the 2 leftmost digits on the display. 

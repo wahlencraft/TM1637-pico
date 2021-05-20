@@ -6,8 +6,11 @@
   function. 
 - Ability to get current display brightness with the `TM1637_get_brightness()`
   function.
-## Changed
+- Refresh the state machine clock with `TM1637_refresh_frequency()`.
+### Changed
 - `TM1637_display_word()` can now also disply a colon.
+- The state machine (that sends data to TM1637) clockspeed is now adjusted 
+  for different system clocks.
 
 ## [1.1.0] - 2020-05-01
 ### Added

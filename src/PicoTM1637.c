@@ -3,6 +3,7 @@
 #include <stdbool.h>
 #include <pico/stdlib.h>
 #include <hardware/pio.h>
+#include <hardware/clocks.h>
 #include <PicoTM1637.h>
 #include <PicoTM1637.pio.h>
 
@@ -15,6 +16,7 @@
 PIO pio;
 uint clkPin, dioPin, sm, brightness = 0;
 bool colon = true;
+pio_sm_config smConfig;
 
 static const uint8_t digitToSegment[] = {
   0b00111111,    // 0
@@ -40,7 +42,7 @@ static const uint8_t segmentsArr[] = {
 };
 
 void TM1637_init(uint clk, uint dio) {
-  // Choose which PIO instance to use (there are two instances)
+  // Choose which PIO and sm instance to use 
   pio = pio0;
   sm = 0;
 
@@ -53,10 +55,32 @@ void TM1637_init(uint clk, uint dio) {
   // to remember this location!
   uint offset = pio_add_program(pio, &tm1637_program);
 
-  // Find a free state machine on our chosen PIO (erroring if there are
-  // none). Configure it to run our program, and start it, using the
-  // helper function we included in our .pio file.
-  tm1637_program_init(pio, sm, offset, clkPin, dioPin);
+  smConfig = tm1637_program_get_default_config(offset);
+
+  gpio_pull_up(clkPin);
+  gpio_pull_up(dioPin);
+
+  pio_gpio_init(pio, clkPin);
+  pio_gpio_init(pio, dioPin);
+
+  sm_config_set_sideset_pins(&smConfig, clkPin);
+
+  uint32_t both_pins = (1u << clkPin) | (1u << dioPin);
+  pio_sm_set_pins_with_mask(pio, sm, both_pins, both_pins);
+  pio_sm_set_pindirs_with_mask(pio, sm, both_pins, both_pins);
+
+  sm_config_set_out_pins(&smConfig, dioPin, 1);
+  sm_config_set_set_pins(&smConfig, dioPin, 1);
+
+  sm_config_set_out_shift(&smConfig, true, false, 32);
+
+  TM1637_refresh_frequency();
+
+  // Load our configuration, and jump to the start of the program
+  pio_sm_init(pio, sm, offset, &smConfig);
+
+  // Set the state machine running
+  pio_sm_set_enabled(pio, sm, true);
 
   stdio_init_all();
 }
@@ -267,6 +291,19 @@ void TM1637_clear() {
   pio_sm_put_blocking(pio, sm, 0x80);
   pio_sm_put_blocking(pio, sm, 0xc040);
   pio_sm_put_blocking(pio, sm, 0x0);
+}
+
+void TM1637_refresh_frequency(void) {
+  // Set sm clock close to 45 kHz
+  uint32_t sysFreq = clock_get_hz(clk_sys);
+  float divider = sysFreq/45000;
+  if (divider > 65536) {
+    divider = 65536;
+  } else if (divider < 1) {
+    divider = 1;
+  }
+
+  sm_config_set_clkdiv(&smConfig, divider); 
 }
 
 void TM1637_wait() {

@@ -96,6 +96,11 @@ int TM1637_get_brightness();
 /** Clear the display. */
 void TM1637_clear();
 
+/** Reset the frequency at which TM1637 recives data.
+ *
+ * Call this function in case the system clock frequency has been changed since
+ * the call of `TM1637_init()`. */
+void TM1637_refresh_frequency();
 
 /** Wait for the TM1637 display.
  * 

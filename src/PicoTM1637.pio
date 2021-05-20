@@ -77,33 +77,3 @@ _stopCond_sendDigit:
    IN y, 32;
    PUSH noblock;
 
-% c-sdk {
-static inline void tm1637_program_init(PIO pio, uint sm, uint offset, uint pin_SCL, uint pin_SDA) {
-    pio_sm_config c = tm1637_program_get_default_config(offset);
-
-    gpio_pull_up(pin_SCL);
-    gpio_pull_up(pin_SDA);
-
-    pio_gpio_init(pio, pin_SCL);
-    pio_gpio_init(pio, pin_SDA);
-
-    sm_config_set_sideset_pins(&c, pin_SCL);
-
-    uint32_t both_pins = (1u << pin_SCL) | (1u << pin_SDA);
-    pio_sm_set_pins_with_mask(pio, sm, both_pins, both_pins);
-    pio_sm_set_pindirs_with_mask(pio, sm, both_pins, both_pins);
-
-    sm_config_set_out_pins(&c, pin_SDA, 1);
-    sm_config_set_set_pins(&c, pin_SDA, 1);
-
-    sm_config_set_out_shift(&c, true, false, 32);
-
-    sm_config_set_clkdiv(&c, (float)(24000000/1000)); // The slowest clock possible!
-
-    // Load our configuration, and jump to the start of the program
-    pio_sm_init(pio, sm, offset, &c);
-
-    // Set the state machine running
-    pio_sm_set_enabled(pio, sm, true);
-}
-%}

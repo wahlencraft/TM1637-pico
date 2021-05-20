@@ -209,7 +209,6 @@ void TM1637_display_word(char *word, bool leftAlign) {
   if (col >= 0) {
     bin |= (0x80 << col*8);
   }
-  printf("0x%x\n", bin);
   TM1637_put_4_bytes(startIndex, bin);
 }
 
@@ -258,6 +257,10 @@ void TM1637_set_colon(bool on) {
 
 void TM1637_set_brightness(int value) {
   brightness = value;
+}
+
+int TM1637_get_brightness() {
+  return brightness;
 }
 
 void TM1637_clear() {

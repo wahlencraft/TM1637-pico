@@ -88,6 +88,11 @@ void TM1637_set_colon(bool on);
  * @param val can be a value from `0` to `7`. The default brightness is 0. */
 void TM1637_set_brightness(int val);
 
+/** Get the current brightness level.
+ *
+ * Returns an integer from 0 to 7 represenging current brightness level. */
+int TM1637_get_brightness();
+
 /** Clear the display. */
 void TM1637_clear();
 

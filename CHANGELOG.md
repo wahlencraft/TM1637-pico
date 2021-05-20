@@ -4,6 +4,8 @@
 ### Added
 - Ability to wait for everything to be sent to display with the `TM1637_wait()`
   function. 
+- Ability to get current display brightness with the `TM1637_get_brightness()`
+  function.
 ## Changed
 - `TM1637_display_word()` can now also disply a colon.
 

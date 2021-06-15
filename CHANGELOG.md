@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## [1.2.0] - 2021-06-15
 ### Added
 - Ability to wait for everything to be sent to display with the `TM1637_wait()`
   function. 

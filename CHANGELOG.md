@@ -8,7 +8,7 @@
   function.
 - Refresh the state machine clock with `TM1637_refresh_frequency()`.
 ### Changed
-- `TM1637_display_word()` can now also disply a colon.
+- `TM1637_display_word()` can now also display a colon.
 - The state machine (that sends data to TM1637) clockspeed is now adjusted 
   for different system clocks.
 ## Fixed

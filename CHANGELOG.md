@@ -11,8 +11,10 @@
 - `TM1637_display_word()` can now also disply a colon.
 - The state machine (that sends data to TM1637) clockspeed is now adjusted 
   for different system clocks.
+## Fixed
+- Changelog dates now has correct year.
 
-## [1.1.0] - 2020-05-01
+## [1.1.0] - 2021-05-01
 ### Added
 - Ability to display words with the
   [`TM1637_display_word()`](https://wahlencraft.github.io/TM1637-pico/html/PicoTM1637_8h.html#aa79d2b795727374b09dd278218381ecb)
@@ -20,4 +22,4 @@
 - A [documentation](https://wahlencraft.github.io/TM1637-pico/html/PicoTM1637_8h.html)
   of the API.
 
-## [1.0.0] - 2020-04-24
+## [1.0.0] - 2021-04-24

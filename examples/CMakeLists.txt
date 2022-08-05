@@ -18,4 +18,4 @@ add_executable(TM1637_demo demo.c)
 target_link_libraries(TM1637_demo PicoTM1637 pico_stdlib)
 
 # Uncomment for .uf2 output
-#pico_add_extra_outputs(TM1637_pico_test)
+#pico_add_extra_outputs(TM1637_demo)

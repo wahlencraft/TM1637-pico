@@ -1,5 +1,9 @@
 # Changelog
 
+## [1.2.1] - 2022-11-29
+## Fixed
+- Fix compilation error when making .uf2 target in demo
+
 ## [1.2.0] - 2021-06-15
 ### Added
 - Ability to wait for everything to be sent to display with the `TM1637_wait()`

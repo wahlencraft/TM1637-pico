@@ -65,9 +65,9 @@ void TM1637_init(uint clk, uint dio) {
 
   sm_config_set_sideset_pins(&smConfig, clkPin);
 
-  uint32_t both_pins = (1u << clkPin) | (1u << dioPin);
-  pio_sm_set_pins_with_mask(pio, sm, both_pins, both_pins);
-  pio_sm_set_pindirs_with_mask(pio, sm, both_pins, both_pins);
+  uint64_t both_pins = (1uLL << clkPin) | (1uLL << dioPin);
+  pio_sm_set_pins_with_mask64(pio, sm, both_pins, both_pins);
+  pio_sm_set_pindirs_with_mask64(pio, sm, both_pins, both_pins);
 
   sm_config_set_out_pins(&smConfig, dioPin, 1);
   sm_config_set_set_pins(&smConfig, dioPin, 1);
